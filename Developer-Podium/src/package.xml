@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>PodiumCallout</members>
+        <members>PodiumCalloutInitial</members>
+        <members>PodiumScheduler</members>
+        <members>PodiumScheduler_TEST</members>
+        <members>Podium_WebService_Mock</members>
+        <members>TestDataFactory</members>
+        <members>TestDataFactory_Opportunity</members>
+        <name>ApexClass</name>
+    </types>
+    <version>45.0</version>
+</Package>
