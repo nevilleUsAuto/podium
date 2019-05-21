@@ -80,7 +80,9 @@ public with sharing class TestDataFactory_Opportunity {
                                 StageName = 'Qualify',
                                 CloseDate = Date.today().addDays(120),
                                 Store_Location__c = lc.Id,
-                                Buyer_Contact__c = contacts[i].Id)
+                                Buyer_Contact__c = contacts[i].Id,
+                                Podium_Ready__c = true
+                        )
                 );
             }
 

@@ -12,7 +12,7 @@ global with sharing class PodiumCallout {
     }
 
     @Future(Callout=true) global static void podiumProcess() {
-        JSONGenerator msgBody;
+        //JSONGenerator msgBody;
         List<Opportunity> oppsToUpdate = new List<Opportunity>();
         List<Opportunity> opps = [SELECT Id, Name,
                 Store_Location__r.Podium_Id__c,
@@ -38,7 +38,7 @@ global with sharing class PodiumCallout {
         try {
             for (Opportunity opp : opps) {
 
-                msgBody = JSON.createGenerator(true);
+                /* JSONGenerator msgBody = JSON.createGenerator(true);
                 msgBody.writeStartObject();
                 msgBody.writeStringField('locationId', String.valueOf(opp.Store_Location__r.Podium_Id__c));
                 msgBody.writeStringField('phoneNumber', opp.Buyer_Contact__r.MobilePhone);
@@ -48,10 +48,18 @@ global with sharing class PodiumCallout {
                 msgBody.writeStringField('senderEmail', 'apiuser@usauto-sales.com');
                 msgBody.writeStringField('preventSend', 'false');
                 msgBody.writeStringField('test', 'false');
-                msgBody.writeEndObject();
+                msgBody.writeEndObject();*/
+
                 /*****************************************
                  * start: -- //HttpResponse hr = putPodium(msgBody);
                  ****************************************/
+
+                String msgBody = '{"locationId":"' + String.valueOf(opp.Store_Location__r.Podium_Id__c) + '","phoneNumber":"' +
+                        opp.Buyer_Contact__r.MobilePhone + '","email":"' +
+                        opp.Buyer_Contact__r.Email + '","firstName":"' +
+                        opp.Buyer_Contact__r.FirstName + '","lastName":"' +
+                        opp.Buyer_Contact__r.LastName + '","senderEmail":"apiuser@usauto-sales.com"' +
+                        ',"preventSend": false,"test": false }';
 
                 Http http = new Http();
                 HttpRequest request = new HttpRequest();
@@ -60,8 +68,7 @@ global with sharing class PodiumCallout {
                 request.setHeader('Content-Type', 'application/json;charset=UTF-8');
                 request.setHeader('Authorization', 'a05fda4a270211e0b06aa8daf5287205');
                 request.setTimeout(120000);
-
-                request.setBody(msgBody.toString());
+                request.setBody(msgBody);
                 HttpResponse response = http.send(request);
 
                 // track all status codes on the request.  adding new field PodiumResponse__c
@@ -74,6 +81,7 @@ global with sharing class PodiumCallout {
                     System.debug('Podium Response Body: ' + response.getStatusCode() + ' ~~~ ' + response.getBody());
                     opp.Podium_Survey__c = true;
                 }
+
                 oppsToUpdate.add(opp);
                 /*****************************************
                  * end
@@ -90,7 +98,7 @@ global with sharing class PodiumCallout {
                     + ' ~~~ ' + e.getStackTraceString() );
         } finally {
             if (oppsToUpdate.size() != 0) {
-                upsert oppsToUpdate;
+                update oppsToUpdate;
 
             }
         }
